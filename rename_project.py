@@ -1,6 +1,7 @@
 import os
 from rope.base.project import Project
 from rope.refactor.rename import Rename
+from rope.base.libutils import path_to_resource
 
 def rename_in_project(project_root, old_name, new_name):
     project = Project(project_root)
@@ -11,14 +12,20 @@ def rename_in_project(project_root, old_name, new_name):
     for resource in resources:
         print(f"Checking {resource.path}...")
         
-        # Create a Rename refactoring for this resource
-        renamer = Rename(project, resource, old_name)
-        changes = renamer.get_changes(new_name)
+        # Read the content of the file
+        with open(resource.real_path, 'r') as file:
+            content = file.read()
         
-        # Apply the changes if any were found
-        if changes.changes:
-            print(f"Renaming in {resource.path}...")
-            project.do(changes)
+        # Check if the old_name exists in the file
+        if old_name in content:
+            # Create a Rename refactoring for this resource
+            renamer = Rename(project, resource, old_name)
+            changes = renamer.get_changes(new_name)
+            
+            # Apply the changes if any were found
+            if changes.changes:
+                print(f"Renaming in {resource.path}...")
+                project.do(changes)
 
     print("Renaming complete.")
 
