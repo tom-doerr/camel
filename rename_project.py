@@ -5,8 +5,8 @@ from rope.refactor.rename import Rename
 def rename_in_project(project_root, old_name, new_name):
     project = Project(project_root)
     
-    # Find all resources in the project
-    resources = project.get_files()
+    # Find all Python files in the project
+    resources = [r for r in project.get_files() if r.name.endswith('.py')]
 
     for resource in resources:
         print(f"Checking {resource.path}...")
