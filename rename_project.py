@@ -18,16 +18,15 @@ def rename_in_project(project_root, old_name, new_name):
         
         # Check if the old_name exists in the file
         if old_name in content:
-            # Find the offset of the old_name in the content
-            offset = content.index(old_name)
-            
             # Create a Rename refactoring for this resource
-            renamer = Rename(project, resource, old_name, offset)
-            changes = renamer.get_changes(new_name)
+            renamer = Rename(project, resource, old_name)
             
-            # Apply the changes if any were found
-            if changes.changes:
+            # Find the occurrences of old_name
+            occurrences = renamer.get_occurrences()
+            
+            if occurrences:
                 print(f"Renaming in {resource.path}...")
+                changes = renamer.get_changes(new_name)
                 project.do(changes)
 
     print("Renaming complete.")
