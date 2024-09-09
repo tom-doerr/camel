@@ -142,7 +142,7 @@ def get_openai_tool_schema(func: Callable) -> Dict[str, Any]:
     return openai_tool_schema
 
 
-class OpenAIFunction:
+class FunctionTool:
     r"""An abstraction of a function that OpenAI chat models can call. See
     https://platform.openai.com/docs/api-reference/chat/create.
 
